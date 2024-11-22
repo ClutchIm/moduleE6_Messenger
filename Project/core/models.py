@@ -5,14 +5,23 @@ class Member(models.Model):
     username = models.CharField(max_length=20, unique=True)
     image = models.ImageField(upload_to='core/images/')
 
+    def __str__(self):
+        return self.username
+
 
 class Chat(models.Model):
     name = models.CharField(max_length=50)
-    members = models.ForeignKey(Member, on_delete=models.CASCADE)
+    members = models.ManyToManyField(Member)
+
+    def __str__(self):
+        return self.name
 
 
 class Message(models.Model):
     author = models.ForeignKey(Member, on_delete=models.CASCADE)
-    message = models.TextField()
+    text = models.TextField()
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text[:20] + '...'
